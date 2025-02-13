@@ -11,7 +11,10 @@ sub wrap-paragraph(Str $_, :$max-len, :$prefix) {
     my (&len, $paragraph-prefix) = (&display-length, $prefix || ~$<prefix>);
     my $line-len = len $prefix;
 
-    sub wrap-words-to-lines(@lines, $text ($word, $ws='')) {
+    multi sub wrap-words-to-lines(@lines) {
+        wrap-words-to-lines(@lines, ("",))
+    }
+    multi sub wrap-words-to-lines(@lines, $text ($word, $ws='')) {
         my $prefix = ~($paragraph-prefix ~~ /\n*<(\V*)>/);
 
         my @next-lines = gather if $line-len+len($word) ≤ $max-len {
